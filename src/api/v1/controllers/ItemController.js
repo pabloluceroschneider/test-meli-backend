@@ -1,5 +1,6 @@
 var axios = require('axios');
-const { detailSchema } = require("../models/ItemDetail");
+const ItemsService = require("../services/ItemsService");
+const ItemService = require("../services/ItemService");
 
 class ItemControler {
 	
@@ -9,11 +10,9 @@ class ItemControler {
 		console.log('QUERY :: ', endpoint);
 		axios
 			.get(endpoint)
-			.then((response) => {
-
-				let results = response.data.results.slice(0,4)
-
-				res.send({...response.data, results });
+			.then( async ({data}) => {
+				let product = await ItemsService.getProducts(data)
+				res.send(product)
 			})
 			.catch(function(error) {
 				// handle error
@@ -38,27 +37,8 @@ class ItemControler {
 		  .then( ({data}) => {
             axios.get(endpoint.description)
     		  .then( async response_description => {
-				let price = JSON.stringify(data.price).split(".")
-				let product = await detailSchema.validateAsync(
-					{ 
-						author: {},
-						item: {
-							id: data.id,
-							title: data.title,
-							price: {
-								currency: data.currency_id,
-								amount: parseFloat(price[0]),
-								decimals: parseFloat(price[1])
-							},
-							picture: data.pictures[0].url,
-							condition: data.condition,
-							free_shipping: data.shipping.free_shipping,
-							sold_quantity: data.sold_quantity,
-							description: response_description.data.description
-						}
-					}
-				)
-                res.send(product)
+				let product = await ItemService.getProduct( {...data, ...response_description.data} )
+				res.send(product)
             }).catch( error => {
 				res.send({
 					error: true,

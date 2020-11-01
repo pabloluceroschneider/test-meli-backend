@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const detailSchema = require('./ItemDetail');
+const { detailSchema } = require('./ItemDetail');
 
 const itemsSchema = Joi.object({
     author: Joi.object({
@@ -7,7 +7,20 @@ const itemsSchema = Joi.object({
         lastname: Joi.string()
     }),
     categories: Joi.array().items(Joi.string()),
-    items: Joi.array().items( detailSchema )
+    items: Joi.array().items(Joi.object({
+            id: Joi.string(),
+            title: Joi.string(),
+            price: Joi.object({
+                currency: Joi.string(),
+                amount: Joi.number(),
+                decimals: Joi.number()
+            }),
+            picture: Joi.string(),
+            condition: Joi.string(),
+            free_shipping: Joi.boolean()
+        }))
 })
 
-module.exports = itemsSchema;
+module.exports = {
+    itemsSchema
+};
