@@ -18,9 +18,13 @@ class ItemsService {
                 },
                 picture: element.thumbnail,
                 condition: element.condition,
-                free_shipping: element.shipping.free_shipping
+                free_shipping: element.shipping.free_shipping,
             })
         })
+
+        let categories = data.filters.length ? data.filters.find( f => f.id === "category").values.map( v => {
+            return v.name
+        }) : [];
 
         let product = await itemsSchema.validateAsync(
             { 
@@ -28,9 +32,7 @@ class ItemsService {
                     name: "name",
                     lastname: "lastname"
                 },
-                categories: data.filters.find( f => f.id === "category").values.map( v => {
-                    return v.name
-                }),
+                categories: categories,
                 items: items
             }
         )
