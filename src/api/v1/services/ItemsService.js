@@ -19,6 +19,7 @@ class ItemsService {
                 picture: element.thumbnail,
                 condition: element.condition,
                 free_shipping: element.shipping.free_shipping,
+                address: element.address.state_name
             })
         })
 
