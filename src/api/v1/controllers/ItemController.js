@@ -5,7 +5,9 @@ const ItemService = require("../services/ItemService");
 class ItemControler {
 	
 	static find = (req, res, next) => {
-		let endpoint = 'https://api.mercadolibre.com/sites/MLA/search?q=:query'.replace(':query', req.query.q);
+		let limit = 4;
+		let endpoint = 'https://api.mercadolibre.com/sites/MLA/search?q=:query&limit=:limit'
+		endpoint = endpoint.replace(':query', req.query.q).replace(':limit', limit);
 
 		console.log('QUERY :: ', endpoint);
 		axios

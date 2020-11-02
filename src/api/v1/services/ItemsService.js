@@ -6,7 +6,7 @@ class ItemsService {
     static getProducts = async data => {
 
         let items = []
-        await data.results.slice(0,4).forEach( async element => {
+        await data.results.forEach( async element => {
             let price = JSON.stringify(element.price).split(".")
             items.push({ 
                 id: element.id,
@@ -24,7 +24,10 @@ class ItemsService {
 
         let product = await itemsSchema.validateAsync(
             { 
-                author: {},
+                author: {
+                    name: "name",
+                    lastname: "lastname"
+                },
                 categories: data.filters.find( f => f.id === "category").values.map( v => {
                     return v.name
                 }),
