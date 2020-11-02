@@ -3,7 +3,6 @@ const { detailSchema } = require("../models/ItemDetail");
 
 class ItemsService {
     static getProduct = async data => {
-        console.log(data)
         let price = JSON.stringify(data.price).split(".")
         let product = await detailSchema.validateAsync(
             { 
@@ -14,7 +13,7 @@ class ItemsService {
                     price: {
                         currency: data.currency_id,
                         amount: parseFloat(price[0]),
-                        decimals: parseFloat(price[1])
+                        decimals: parseFloat(price[1] ? price[1] : 0)
                     },
                     picture: data.pictures[0].url,
                     condition: data.condition,
